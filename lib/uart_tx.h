@@ -3,6 +3,11 @@
 
 #include "uart_pico.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 // Structure to hold the configuration for UART TX
 typedef struct
 {
@@ -19,5 +24,9 @@ void UartTx_write(UartTx *uart, uint8_t c);
 void UartTx_print(UartTx *uart, const char *str);
 void UartTx_println(UartTx *uart, const char *str);
 void UartTx_free(UartTx *uart);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // UART_TX_H

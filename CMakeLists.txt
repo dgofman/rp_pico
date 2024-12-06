@@ -16,13 +16,15 @@ pico_sdk_init()
 
 # Specify the source files
 add_executable(${PROJECT_NAME}
-    main.c
+    main.cpp
 )
 
 # Include the uart directory for header files
-file(GLOB UART_SOURCES "lib/*.c")
-target_sources(${PROJECT_NAME} PRIVATE ${UART_SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE lib)
+file(GLOB PROJECT_SOURCES "lib/*.c", "gps/*.c")
+target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
+target_include_directories(${PROJECT_NAME} PRIVATE lib gps)
+
+# message(STATUS "Source Files ->> ${PROJECT_SOURCES}")
 
 # Link the necessary libraries
 target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_pio)

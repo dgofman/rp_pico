@@ -119,7 +119,7 @@ UartRx *UartRx_init(UartPico *pico, uint8_t rx)
     uart->writer = 0;
 
     // Allocate memory for the queue
-    uart->queue = (uint8_t *)malloc(pico->fifoSize * 2);
+    uart->queue = (uint8_t *)malloc(pico->fifoSize * sizeof(uint8_t));
     if (uart->queue == NULL)
     {
         free(uart);
@@ -222,21 +222,59 @@ int UartRx_available(UartRx *uart)
  * @param terminator Character that marks the end of the string.
  * @return The string of data received from the UART.
  */
-char *UartRx_readStringUntil(UartRx *uart, char terminator)
+char *UartRx_read(UartRx *uart)
 {
     UartPico *pico = uart->pico;
-    static char result[100]; // Adjust the buffer size if needed
+    static char result[UART_MAX_BUFFER_LENGTH];
     int idx = 0;
     while (uart->reader != uart->writer)
     {
         char c = (char)uart->queue[uart->reader];
         uart->reader = (uart->reader + 1) % pico->fifoSize; // Move the reader pointer
-        if (c == terminator)
-        {
-            break; // Stop if the terminator is found
-        }
         result[idx++] = c;
     }
-    result[idx] = '\0'; // Null-terminate the string
     return result;
+}
+
+static char _result[UART_MAX_BUFFER_LENGTH]; // Store the result (the line)
+static int _result_idx = 0;                  // Track the position in the result buffer
+
+/**
+ * @brief Reads characters from the UART buffer until a newline ('\n') is encountered.
+ *
+ * This function processes available characters in the UART buffer incrementally,
+ * appending them to a static result buffer. Once a newline character ('\n') is
+ * encountered, the result buffer is terminated and returned. If no newline is found,
+ * the function returns NULL, and you can call it repeatedly to continue processing
+ * characters until the newline is found.
+ *
+ * @param uart Pointer to a UartRx structure, which contains the UART buffer and read/write pointers.
+ * @return A pointer to a static buffer holding the collected string, or NULL if no newline is found yet.
+ */
+char *UartRx_readLine(UartRx *uart)
+{
+    UartPico *pico = uart->pico;
+
+    // Process available characters in the buffer
+    while (uart->reader != uart->writer)
+    {
+        char c = (char)uart->queue[uart->reader];
+        uart->reader = (uart->reader + 1) % pico->fifoSize; // Move the reader pointer
+
+        // Append the character to the result buffer
+        if (_result_idx < UART_MAX_BUFFER_LENGTH - 1)
+        {
+            _result[_result_idx++] = c;
+        }
+
+        // If a newline is encountered, terminate the string and return it
+        if (c == '\n')
+        {
+            _result[_result_idx] = '\0'; // Null-terminate the string
+            _result_idx = 0;             // Reset for the next line
+            return _result;              // Return the collected line
+        }
+    }
+
+    return NULL;
 }
