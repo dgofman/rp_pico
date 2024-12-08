@@ -27,11 +27,6 @@ void setup()
     printf("GPS Module Initialized.\n");
 }
 
-// Variable to track time
-unsigned long lastTime = 0;
-unsigned long pauseInterval = 10000; // 20 seconds (in milliseconds)
-bool isPaused = false;               // Flag to track whether it's in paused state
-
 void loop()
 {
     while (NMEAParser_available(&nmeaParser))

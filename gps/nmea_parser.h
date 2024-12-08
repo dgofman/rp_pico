@@ -30,13 +30,13 @@ extern "C"
       5: RTK Float, OmniSTAR XP/HP, Location RTK, RTX
       6: INS Dead reckoning
     */
-    uint8_t num_satellites; // Number of SVs in use, range from 00 through to 24+
-    float hdop;             // Horizontal Dilution of Precision
-    float altitude;         // Orthometric height (MSL reference)
-    char altitude_unit[2];  // M: unit of measure for orthometric height is meters
-    float geoid_separation; // Geoid separation
-    char geoid_unit[2];     // M: geoid separation measured in meters
-    uint32_t last_time;     // Store the current time (e.g., from a timer)
+    uint8_t num_satellites;  // Number of SVs in use, range from 00 through to 24+
+    float hdop;              // Horizontal Dilution of Precision
+    float altitude;          // Orthometric height (MSL reference)
+    char altitude_unit[2];   // M: unit of measure for orthometric height is meters
+    double geoid_separation; // Geoid separation
+    char geoid_unit[2];      // M: geoid separation measured in meters
+    uint32_t last_time;      // Store the current time (e.g., from a timer)
   } GPGGA_Data;
 
   // https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_GLL.html
@@ -109,6 +109,13 @@ extern "C"
   // https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_MessageOverview.html
   typedef struct
   {
+    char *utc_time;      // UTC of position in hhmmss.ss format
+    double latitude;     // Latitude in dd mm,mmmm format (0-7 decimal places)
+    char *latitude_dir;  // Direction of latitude N: North S: South
+    double longitude;    // Longitude in ddd mm,mmmm format (0-7 decimal places)
+    char *longitude_dir; // Direction of longitude E: East W: West
+    float speed;         // Speed over the ground in knots
+
     GPGGA_Data gpgga; // GPGGA - Time, position, and fix related data
     GPGLL_Data gpgll; // GPGLL - Position data: position fix, time of position fix, and status
     GPRMC_Data gprmc; // GPRMC - Position, velocity, and time

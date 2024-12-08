@@ -163,58 +163,58 @@ void NMEAParser_rest(NMEAParser *parser, char *rest)
   if (parser->GPGGA_ENABLED && strcmp(token, "$GPGGA") == 0)
   {
     GPGGA_Data *gpgga = &parser->data.gpgga;
-    strcpy(gpgga->utc_time, getToken(&rest));        // UTC of position fix
-    gpgga->latitude = atof(getToken(&rest));         // Latitude
-    strcpy(gpgga->latitude_dir, getToken(&rest));    // Direction of latitude: (N: North, S: South)
-    gpgga->longitude = atof(getToken(&rest));        // Longitude
-    strcpy(gpgga->longitude_dir, getToken(&rest));   // Direction of longitude: (E: East, W: West)
-    gpgga->fix_status = atoi(getToken(&rest));       // GPS Quality indicator
-    gpgga->num_satellites = atoi(getToken(&rest));   // Number of SVs in use, range from 00 through to 24+
-    gpgga->hdop = atof(getToken(&rest));             // Horizontal Dilution of Precision
-    gpgga->altitude = atof(getToken(&rest));         // Orthometric height (MSL reference)
-    strcpy(gpgga->altitude_unit, getToken(&rest));   // M: unit of measure for orthometric height is meters
-    gpgga->geoid_separation = atof(getToken(&rest)); // Geoid separation
-    strcpy(gpgga->geoid_unit, getToken(&rest));      // M: geoid separation measured in meters
-    gpgga->last_time = _millis();                    // Store the current time (e.g., from a timer)
+    strcpy(parser->data.utc_time = gpgga->utc_time, getToken(&rest));           // UTC of position fix
+    parser->data.latitude = gpgga->latitude = atof(getToken(&rest));            // Latitude
+    strcpy(parser->data.latitude_dir = gpgga->latitude_dir, getToken(&rest));   // Direction of latitude: (N: North, S: South)
+    parser->data.longitude = gpgga->longitude = atof(getToken(&rest));          // Longitude
+    strcpy(parser->data.longitude_dir = gpgga->longitude_dir, getToken(&rest)); // Direction of longitude: (E: East, W: West)
+    gpgga->fix_status = atoi(getToken(&rest));                                  // GPS Quality indicator
+    gpgga->num_satellites = atoi(getToken(&rest));                              // Number of SVs in use, range from 00 through to 24+
+    gpgga->hdop = atof(getToken(&rest));                                        // Horizontal Dilution of Precision
+    gpgga->altitude = atof(getToken(&rest));                                    // Orthometric height (MSL reference)
+    strcpy(gpgga->altitude_unit, getToken(&rest));                              // M: unit of measure for orthometric height is meters
+    gpgga->geoid_separation = atof(getToken(&rest));                            // Geoid separation
+    strcpy(gpgga->geoid_unit, getToken(&rest));                                 // M: geoid separation measured in meters
+    gpgga->last_time = _millis();                                               // Store the current time (e.g., from a timer)
   }
   else if (parser->GPGLL_ENABLED && strcmp(token, "$GPGLL") == 0)
   {
     GPGLL_Data *gpgll = &parser->data.gpgll;
-    gpgll->latitude = atof(getToken(&rest));       // Latitude in dd mm,mmmm format (0-7 decimal places)
-    strcpy(gpgll->latitude_dir, getToken(&rest));  // Direction of latitude N: North S: South
-    gpgll->longitude = atof(getToken(&rest));      // Longitude in ddd mm,mmmm format (0-7 decimal places)
-    strcpy(gpgll->longitude_dir, getToken(&rest)); // Direction of longitude E: East W: West
-    strcpy(gpgll->utc_time, getToken(&rest));      // UTC of position in hhmmss.ss format
-    strcpy(gpgll->status, getToken(&rest));        // Status indicator: (A: Data valid, V: Data not valid)
-    gpgll->last_time = _millis();                  // Store the current time (e.g., from a timer)
+    parser->data.latitude = gpgll->latitude = atof(getToken(&rest));            // Latitude in dd mm,mmmm format (0-7 decimal places)
+    strcpy(parser->data.latitude_dir = gpgll->latitude_dir, getToken(&rest));   // Direction of latitude N: North S: South
+    parser->data.longitude = gpgll->longitude = atof(getToken(&rest));          // Longitude in ddd mm,mmmm format (0-7 decimal places)
+    strcpy(parser->data.longitude_dir = gpgll->longitude_dir, getToken(&rest)); // Direction of longitude E: East W: West
+    strcpy(parser->data.utc_time = gpgll->utc_time, getToken(&rest));           // UTC of position in hhmmss.ss format
+    strcpy(gpgll->status, getToken(&rest));                                     // Status indicator: (A: Data valid, V: Data not valid)
+    gpgll->last_time = _millis();                                               // Store the current time (e.g., from a timer)
   }
   else if (parser->GPRMC_ENABLED && strcmp(token, "$GPRMC") == 0)
   {
     GPRMC_Data *gprmc = &parser->data.gprmc;
-    strcpy(gprmc->utc_time, getToken(&rest));      // UTC of position fix
-    strcpy(gprmc->status, getToken(&rest));        // Status (A=active or V=void)
-    gprmc->latitude = atof(getToken(&rest));       // Latitude in dd mm,mmmm format (0-7 decimal places)
-    strcpy(gprmc->latitude_dir, getToken(&rest));  // Direction of latitude N: North S: South
-    gprmc->longitude = atof(getToken(&rest));      // Longitude in ddd mm,mmmm format (0-7 decimal places)
-    strcpy(gprmc->longitude_dir, getToken(&rest)); // Direction of longitude E: East W: West
-    gprmc->speed = atof(getToken(&rest));          // Speed over the ground in knots
-    gprmc->track = atof(getToken(&rest));          // Track angle in degrees (True)
-    strcpy(gprmc->date, getToken(&rest));          // Date
-    gprmc->variation = atof(getToken(&rest));      // Magnetic variation, in degrees
-    gprmc->last_time = _millis();                  // Store the current time (e.g., from a timer)
+    strcpy(parser->data.utc_time = gprmc->utc_time, getToken(&rest));           // UTC of position fix
+    strcpy(gprmc->status, getToken(&rest));                                     // Status (A=active or V=void)
+    parser->data.latitude = gprmc->latitude = atof(getToken(&rest));            // Latitude in dd mm,mmmm format (0-7 decimal places)
+    strcpy(parser->data.latitude_dir = gprmc->latitude_dir, getToken(&rest));   // Direction of latitude N: North S: South
+    parser->data.longitude = gprmc->longitude = atof(getToken(&rest));          // Longitude in ddd mm,mmmm format (0-7 decimal places)
+    strcpy(parser->data.longitude_dir = gprmc->longitude_dir, getToken(&rest)); // Direction of longitude E: East W: West
+    parser->data.speed = gprmc->speed = atof(getToken(&rest));                  // Speed over the ground in knots
+    gprmc->track = atof(getToken(&rest));                                       // Track angle in degrees (True)
+    strcpy(gprmc->date, getToken(&rest));                                       // Date
+    gprmc->variation = atof(getToken(&rest));                                   // Magnetic variation, in degrees
+    gprmc->last_time = _millis();                                               // Store the current time (e.g., from a timer)
   }
   else if (parser->GPVTG_ENABLED && strcmp(token, "$GPVTG") == 0)
   {
     GPVTG_Data *gpvtg = &parser->data.gpvtg;
-    gpvtg->track1 = atof(getToken(&rest));     // Track made good (degrees true)
-    strcpy(gpvtg->track1_id, getToken(&rest)); // T: track made good is relative to true north
-    gpvtg->track2 = atof(getToken(&rest));     // Track made good (degrees magnetic)
-    strcpy(gpvtg->track2_id, getToken(&rest)); // M: track made good is relative to magnetic north
-    gpvtg->speed1 = atof(getToken(&rest));     // Speed, in knots
-    strcpy(gpvtg->speed1_id, getToken(&rest)); // N: speed is measured in knots
-    gpvtg->speed2 = atof(getToken(&rest));     // Speed over ground in kilometers/hour (kph)
-    strcpy(gpvtg->speed2_id, getToken(&rest)); // K: speed over ground is measured in kph
-    gpvtg->last_time = _millis();              // Store the current time (e.g., from a timer)
+    gpvtg->track1 = atof(getToken(&rest));                      // Track made good (degrees true)
+    strcpy(gpvtg->track1_id, getToken(&rest));                  // T: track made good is relative to true north
+    gpvtg->track2 = atof(getToken(&rest));                      // Track made good (degrees magnetic)
+    strcpy(gpvtg->track2_id, getToken(&rest));                  // M: track made good is relative to magnetic north
+    parser->data.speed = gpvtg->speed1 = atof(getToken(&rest)); // Speed, in knots
+    strcpy(gpvtg->speed1_id, getToken(&rest));                  // N: speed is measured in knots
+    gpvtg->speed2 = atof(getToken(&rest));                      // Speed over ground in kilometers/hour (kph)
+    strcpy(gpvtg->speed2_id, getToken(&rest));                  // K: speed over ground is measured in kph
+    gpvtg->last_time = _millis();                               // Store the current time (e.g., from a timer)
   }
   else if (parser->GPGSV_ENABLED && strcmp(token, "$GPGSV") == 0)
   {
