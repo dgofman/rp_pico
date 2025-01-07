@@ -1,9 +1,21 @@
 #include <stdio.h>
 #include <pico/stdlib.h>
-#include "gps/nmea_parser.h"
+#include "nmea_parser.h"
 
-#define rxGPS 7
-#define txGPS 8
+// https://www.dragino.com/downloads/downloads/datasheet/other_vendors/L80-R/Quectel_L80-R_Hardware_Design_V1.2.pdf
+/*
+The module provides one universal asynchronous receiver & transmitter serial port. The module is
+designed as DCE (Data Communication Equipment), following the traditional DCE-DTE (Data Terminal
+Equipment) connection. The module and the client (DTE) are connected through the signals shown in
+following figure. It supports data baud-rate from 4800bps to 115200bps.
+UART port:
+* TXD1: Send data to the RXD signal line of DTE.
+* RXD1: Receive data from the TXD signal line of DTE
+*/
+
+// Pin assignments for GPS
+#define TXD2RX 3 // GPS TXD (module transmit) -> SPI0 RX (microcontroller receive)
+#define RXD2TX 4 // GPS RXD (module receive)  -> SPI0 TX (microcontroller transmit)
 
 NMEAParser nmeaParser;
 
@@ -16,7 +28,7 @@ void setup()
     }
     sleep_ms(100);
 
-    NMEAParser_init(&nmeaParser, rxGPS, txGPS);
+    NMEAParser_init(&nmeaParser, TXD2RX, RXD2TX);
     // nmeaParser.GPGGA_ENABLED = false;
     // nmeaParser.GPGLL_ENABLED = false;
     // nmeaParser.GPRMC_ENABLED = false;

@@ -1,12 +1,23 @@
-#include "gps/GPS.h"
-#include "gps/nmea_parser.h"
+#include "GPS.h"
+#include "../nmea/nmea_parser.h"
 
 #include <stdio.h>
 #include <pico/stdlib.h>
 
-// Define RX and TX pins for GPS module communication
-#define rxGPS 7
-#define txGPS 8
+// https://www.dragino.com/downloads/downloads/datasheet/other_vendors/L80-R/Quectel_L80-R_Hardware_Design_V1.2.pdf
+/*
+The module provides one universal asynchronous receiver & transmitter serial port. The module is
+designed as DCE (Data Communication Equipment), following the traditional DCE-DTE (Data Terminal
+Equipment) connection. The module and the client (DTE) are connected through the signals shown in
+following figure. It supports data baud-rate from 4800bps to 115200bps.
+UART port:
+* TXD1: Send data to the RXD signal line of DTE.
+* RXD1: Receive data from the TXD signal line of DTE
+*/
+
+// Pin assignments for GPS
+#define TXD2RX 3 // GPS TXD (module transmit) -> SPI0 RX (microcontroller receive)
+#define RXD2TX 4 // GPS RXD (module receive)  -> SPI0 TX (microcontroller transmit)
 
 // Declare a global pointer to the GPS object
 GPS *gps;
@@ -28,7 +39,7 @@ void setup()
 
     // Initialize the GPS object with default intervals for sentence output
     gps = new GPS(DEFAULT_INTERVALS()); // By default: .GSA = false and .GSV = false
-    gps->init(rxGPS, txGPS);            // Initialize GPS with RX and TX pin configurations
+    gps->init(TXD2RX, RXD2TX);          // Initialize GPS with RX and TX pin configurations
     gps->setDelay(5);                   // Set the GPS update delay to 5 seconds (200 millihertz).
                                         // For optimal performance, it's recommended to use a delay of 1 second (1 Hz) or higher.
     printf("GPS Module Initialized.\n");

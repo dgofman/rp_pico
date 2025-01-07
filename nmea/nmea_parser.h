@@ -1,9 +1,9 @@
 #ifndef NMEA_PARSER_H
 #define NMEA_PARSER_H
 
-#include "../lib/uart_pico.h"
-#include "../lib/uart_rx.h"
-#include "../lib/uart_tx.h"
+#include "../uart/uart_pico.h"
+#include "../uart/uart_rx.h"
+#include "../uart/uart_tx.h"
 
 #define NMEA_PARSER_SUCCESS 0
 #define NMEA_PARSER_ERROR_MEMORY_ALLOCATION 1

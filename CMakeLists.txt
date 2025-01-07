@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.12)
 
-# Pull in SDK (must be before project)
+# Include the Pico SDK
 include(pico_sdk_import.cmake)
 
-# Define project name as a variable
-set(PROJECT_NAME gps_reader)
+# Define the project name
+set(PROJECT_NAME rp_pico)
 
 # Set the project name
 project(${PROJECT_NAME} C CXX)
@@ -14,26 +14,22 @@ set(CMAKE_CXX_STANDARD 17)
 # Initialize the Pico SDK
 pico_sdk_init()
 
-# Specify the source files
-add_executable(${PROJECT_NAME}
-    main.c # Copy file from examples folder
+# Define the top-level library (static library)
+add_library(${PROJECT_NAME} STATIC 
+    uart/uart_rx.c
+    uart/uart_tx.c
+    nmea/nmea_parser.c
+    gps/cgps.c
+    # gps/GPS.cpp # gps/CMakeLists.txt -> add_executable(${PROJECT_NAME} main.cpp)
 )
 
-# Include the uart directory for header files
-file(GLOB PROJECT_SOURCES "lib/*.c", "gps/*.c", "gps/*.cpp")
-target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
-target_include_directories(${PROJECT_NAME} PRIVATE lib gps)
+# Specify the include directories for the top-level library
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} uart nmea gps)
 
-# message(STATUS "Source Files ->> ${PROJECT_SOURCES}")
-
-# Link the necessary libraries
+# Link libraries that the top-level project might need
 target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_pio)
 
-# Enable USB output, disable UART output
-pico_enable_stdio_usb(${PROJECT_NAME} 1)
-
-# Create a UF2 file for uploading to the RP2040
-pico_add_extra_outputs(${PROJECT_NAME})
-
-# Optional: Set verbosity for debugging the build process
-# set(CMAKE_VERBOSE_MAKEFILE ON)
+# Add subdirectories for other components
+add_subdirectory(uart)
+add_subdirectory(nmea)
+add_subdirectory(gps)

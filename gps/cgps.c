@@ -1,6 +1,6 @@
 #include "cgps.h"
-#include "../lib/uart_rx.h"
-#include "../lib/uart_tx.h"
+#include "../uart/uart_rx.h"
+#include "../uart/uart_tx.h"
 #include <stdio.h>
 #include <math.h>
 #include <string.h>

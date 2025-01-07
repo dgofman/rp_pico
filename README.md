@@ -11,14 +11,16 @@ This project demonstrates how to interface the **Quectel L80-R GPS module** with
 
 ## Circuit Connections
 
-Here is how you should wire the **Quectel L80-R GPS module** to the Raspberry Pi Pico:
+Here is how you should wire the Quectel L80-R GPS module to the Raspberry Pi Pico:
 
-- **Quectel L80-R TX (Transmit)** → **Raspberry Pi Pico RX (GPIO 0)** (default UART1 RX).
-- **Quectel L80-R RX (Receive)** → **Raspberry Pi Pico TX (GPIO 1)** (default UART1 TX).
-- **Quectel L80-R GND (Ground)** → **Raspberry Pi Pico GND**.
-- **Quectel L80-R VCC (Power)** → **3.3V or 5V power** (depending on the GPS module's voltage requirements).
+- Quectel L80-R TX (Transmit) → Raspberry Pi Pico RX (GPIO 3) (remapped to SPI0 RX on Pico).
+- Quectel L80-R RX (Receive) → Raspberry Pi Pico TX (GPIO 4) (remapped to SPI0 TX on Pico).
+- Quectel L80-R GND (Ground) → Raspberry Pi Pico GND.
+- Quectel L80-R VCC (Power) → 3.3V or 5V power (depending on the GPS module's voltage requirements).
 
-**Note:** Ensure the GPS module is powered with the correct voltage (typically 3.3V or 5V depending on your module version).
+See: [L80-R Hardware Design](https://www.dragino.com/downloads/downloads/datasheet/other_vendors/L80-R/Quectel_L80-R_Hardware_Design_V1.2.pdf) 3.6. UART Interface
+
+![Wiring](wiring.png)
 
 ## Software Setup
 

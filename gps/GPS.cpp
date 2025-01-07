@@ -1,6 +1,6 @@
 #include "GPS.h"
-#include "../lib/uart_rx.h"
-#include "../lib/uart_tx.h"
+#include "../uart/uart_rx.h"
+#include "../uart/uart_tx.h"
 #include <cstdio>
 #include <math.h>
 
